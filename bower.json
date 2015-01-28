@@ -1,0 +1,27 @@
+{
+  "name": "caret.js",
+  "version": "1.0.0",
+  "authors": [
+    "roshanca <wwj1983@gmail.com>"
+  ],
+  "description": "Get or set caret position, at where you can also insert text.",
+  "main": "dist/caret.js",
+  "keywords": [
+    "caret",
+    "position"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "index.html"
+  ],
+  "devDependencies": {
+    "jquery": "1.9.0",
+    "jasmine-jquery": "~2.0.6"
+  }
+}

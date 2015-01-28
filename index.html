@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Caret.js Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html {
+      margin: 0;
+      padding: 0;
+      font: 14px/1.6 "Lucida Grande", "Helvetica", sans-serif;
+    }
+    body {
+      width: 55%;
+      padding: 20px;
+      margin: 0 auto;
+      color: #333;
+      background-color: #f9f9f9;
+      text-rendering: optimizelegibility;
+    }
+    h2 {
+      margin: 50px 0 10px;
+    }
+    textarea,
+    input {
+      font-size: 100%;
+    }
+    .inputor {
+      overflow: auto;
+      height: 80px;
+      width: 90%;
+      border: 1px solid #dadada;
+      border-radius: 4px;
+      padding: 5px 8px;
+      outline: 0 none;
+      margin: 10px 0;
+      background: white;
+    }
+    .inputor:focus {
+      border: 1px solid blue;
+    }
+    .input {
+      width: 45%;
+      height: 20px;
+    }
+    .group {
+      font-size: 0;
+    }
+    .group button {
+      margin-right: 10px;
+    }
+    .ret {
+      color: red;
+    }
+    strong {
+      display: inline-block;
+      width: 45px;
+    }
+    .fork {
+      margin: 50px 0;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .fork a {
+      color: blue;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Caret.js Demo</h1>
+  <div id="main">
+    <h2>Textarea</h2>
+    <textarea class="inputor" id="textarea">This is a textarea example.</textarea>
+
+    <div class="group">
+      <button class="get" name="textarea">Get Caret Position</button>
+      <button class="set" name="textarea">Set Caret Position</button>
+      <button class="insert" name="textarea">Insert Text At Caret Position</button>
+    </div>
+
+    <p>
+      <strong>Start:</strong>
+      <input class="ret" id="textareaStart" type="text">
+    </p>
+    <p>
+      <strong>End:</strong>
+      <input class="ret" id="textareaEnd" type="text">
+    </p>
+    <p>
+      <strong>Text:</strong>
+      <input class="ret" id="textareaText" type="text">
+    </p>
+
+    <h2>Input</h2>
+    <input class="inputor input" id="input" type="text" value="This is a input example.">
+
+    <div class="group">
+      <button class="get" name="input">Get Caret Position</button>
+      <button class="set" name="input">Set Caret Position</button>
+      <button class="insert" name="input">Insert Text At Caret Position</button>
+    </div>
+
+    <p>
+      <strong>Start:</strong>
+      <input class="ret" id="inputStart" type="text">
+    </p>
+    <p>
+      <strong>End:</strong>
+      <input class="ret" id="inputEnd" type="text">
+    </p>
+    <p>
+      <strong>Text:</strong>
+      <input class="ret" id="inputText" type="text">
+    </p>
+  </div>
+
+  <div class="fork">
+    <p>
+      -> <a href="http://localhost:8000/test.html">Fork me on GitHub</a>
+    </p>
+    <p>
+      -> <a href="test/SpecRunner.html">See Test Runner</a>
+    </p>
+  </div>
+
+  <div class="copyright">
+    © Copyright 2012 - 2015 by Roshan Wu.
+  </div>
+
+  <script src="dist/caret.js"></script>
+  <script>
+    var $ = function (id) {
+      return document.getElementById(id);
+    };
+    var $$ = function (cls) {
+      if (document.querySelectorAll) {
+        return document.querySelectorAll('.' + cls);
+      } if (document.getElementsByClassName) {
+        return document.getElementsByClassName(cls);
+      } else {
+        var collection = [];
+        var all = document.getElementsByTagName('*');
+        var pattern = new RegExp('(^|\\s)' + cls + '(\\s|$)');
+
+        for (var i = 0, l = all.length; i < l; i++) {
+          if (pattern.test(all[i].className)) {
+            collection.push(all[i]);
+          }
+        }
+
+        return collection;
+      }
+    };
+
+    var textarea = $('textarea');
+    var textareaCaret = new Caret(textarea);
+    var input = $('input');
+    var inputCaret = new Caret(input);
+
+    var renderResult = function (type) {
+      var caret = (type === 'input') ? inputCaret : textareaCaret;
+      var ret = caret.getPos();
+
+      $(type + 'Start').value = ret.start;
+      $(type + 'End').value   = ret.end;
+      $(type + 'Text').value  = ret.text || '';
+    };
+
+    var getBtn = $$('get');
+    for (var i = 0; i < getBtn.length; i++) {
+      getBtn[i].onclick = function () {
+        renderResult(this.name);
+      }
+    }
+
+    var setBtn = $$('set');
+    for (var j = 0; j < setBtn.length; j++) {
+      setBtn[j].onclick = function () {
+        var type = this.name;
+        var caret = (type === 'input') ? inputCaret : textareaCaret;
+        var pos = {};
+
+        pos.start = $(type + 'Start').value;
+        pos.end   = $(type + 'End').value;
+
+        caret.setPos(pos);
+        renderResult(type);
+      }
+    }
+
+    var insertBtn = $$('insert');
+    for (var k = 0; k < insertBtn.length; k++) {
+      insertBtn[k].onclick = function () {
+        var type = this.name;
+        var caret = (type === 'input') ? inputCaret : textareaCaret;
+        var pos = {};
+        var text;
+
+        pos.start = $(type + 'Start').value;
+        pos.end   = $(type + 'End').value;
+        text      = $(type + 'Text').value;
+
+        caret.insert(pos, text);
+        renderResult(type);
+      }
+    }
+  </script>
+</body>
+</html>
