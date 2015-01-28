@@ -1,5 +1,13 @@
 node_modules/
 build/
-bower_components/
-test/lib
 .DS_Store
+
+bower_components/*
+!bower_components/jquery/
+!bower_components/jasmine-jquery/
+
+bower_components/jquery/*
+!bower_components/jquery/jquery.js
+
+bower_components/jasmine-jquery/*
+!bower_components/jasmine-jquery/lib/
